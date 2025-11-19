@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { use } from 'react'
 import { useRouter } from 'next/navigation'
 import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
@@ -11,9 +11,10 @@ import RelatedProducts from '@/components/related-products'
 import { products } from '@/lib/product-data'
 import { ChevronLeft } from 'lucide-react'
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
+export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
-  const product = products.find(p => p.id === params.id)
+  const { id } = use(params)
+  const product = products.find(p => p.id === id)
 
   if (!product) {
     return (

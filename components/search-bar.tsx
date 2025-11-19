@@ -1,7 +1,7 @@
 'use client'
 
 import { Search, X } from 'lucide-react'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { getSearchSuggestions } from '@/lib/search-utils'
 
@@ -13,6 +13,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const router = useRouter()
+  const suggestionsRef = useRef<HTMLDivElement>(null)
 
   const suggestions = useMemo(() => {
     return getSearchSuggestions(query)
@@ -38,8 +39,18 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   }
 
   const handleSuggestionClick = (suggestion: string) => {
+    setQuery(suggestion)
     router.push(`/search?q=${encodeURIComponent(suggestion)}`)
     setIsFocused(false)
+  }
+
+  const handleBlur = (e: React.FocusEvent) => {
+    // Delay to allow click on suggestions
+    setTimeout(() => {
+      if (!suggestionsRef.current?.contains(document.activeElement)) {
+        setIsFocused(false)
+      }
+    }, 150)
   }
 
   return (
@@ -56,7 +67,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           value={query}
           onChange={handleChange}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+          onBlur={handleBlur}
           className="flex-1 ml-4 bg-transparent text-sm focus:outline-none text-foreground placeholder-gray-400 dark:placeholder-gray-600"
         />
         {query && (
@@ -72,7 +83,10 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
       {/* Search Suggestions */}
       {isFocused && suggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-4 space-y-2 z-10 luxury-shadow">
+        <div
+          ref={suggestionsRef}
+          className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-4 space-y-2 z-10 luxury-shadow"
+        >
           <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 px-2 mb-3">
             Suggestions
           </p>

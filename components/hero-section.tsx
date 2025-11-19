@@ -38,7 +38,7 @@ export default function HeroSection() {
           {/* Hero Image */}
           <div className="relative h-96 md:h-[500px] overflow-hidden rounded">
             <img
-              src="/luxury-minimalist-product.jpg"
+              src="https://images.unsplash.com/photo-1547949003-9792a18a2601?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
               alt="Hero product"
               className="w-full h-full object-cover"
             />
