@@ -9,7 +9,6 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: 'Luxury Catalog - Premium Products',
   description: 'Discover our curated collection of premium products. Sleek, minimalist design with exceptional quality.',
-  generator: 'v0.app',
   icons: {
     icon: [
       {
